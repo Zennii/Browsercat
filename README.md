@@ -13,6 +13,7 @@ All important functionality happens in **js/mnstr_visualizer.js**
 - Chrome has seemed to have lost performace on this app over time.
 - Sometimes no picture still causes the photo slot to spin and think there is one.
 - Checking for Featured Artists is incomplete.
+- Sometimes looping may not work correctly.
 
 # Live Demo
 I have a live demo on my site, here: http://monstercat.zenny3d.com/
