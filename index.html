@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link type="text/css" rel="stylesheet" href="style/mnstyle.css">
+        <link href='https://fonts.googleapis.com/css?family=Lato:700,300' rel='stylesheet' type='text/css'>
+        <link rel='shortcut icon' type='image/x-icon' href='./favicon.ico' />
+        <script type="text/javascript" src="js/three.min.js"></script>
+        <script type="text/javascript" src="js/mnstr_visualizer.js"></script>
+        <script type="text/javascript" src="js/id3.min.js"></script>
+        <script type="text/javascript" src="js/jscolor.min.js"></script>
+        <title>Browsercat</title>
+    </head>
+    <body>
+        <!--Popup tips TODO
+        <div id="popupwrap" style="opacity:1;top:120px;left:0;">
+            <div id="popuphelp">
+                Lorem ipsum dolor sit amet, herp derp derp lol kek help here...
+            </div>
+            <img src="img/popuptip.png" />
+        </div>-->
+        
+        <div id="tdbox" class="dialogbox" style="margin-left:-1000px;">
+            <b>TODO:</b><br>
+            - Parse out anything inside brackets within song info<br>
+            - Song info editor<br>
+            - More options in general<br>
+            - Playlists
+            
+            <br><br>Click "Todo" again to close this menu.
+        </div>
+        <div id="helpbox" class="dialogbox" style="margin-left:-1000px;">
+            <b>SO YOU NEED HELP, HUH?</b><br>
+            Let me just point out, as you may or may not know, this is a website dedicated to recreating the visual-style used by a YouTube music label called "Monstercat." It was their idea initially, not mine. Great? Okay.<br><br>
+            <b>HOW DO I MAKE IT GO?</b><br>
+            Loading your own sound file into it is fairly easy. You are given 2 options to choose from right now: <b>URL</b> and <b>LOCAL FILE</b>. To load a URL, paste a URL to an MP3 (https://foo.com/bar.mp3) into the box beside the "Load" button and then click "Load."
+            To load a LOCAL FILE, simply leave the URL box empty/blank and click "Load." Select an MP3 from the file chooser and you're done.<br><br>
+            <b>SONG INFO NOT RIGHT?</b><br>
+            Currently it does its best to parse ID3 tags (among a few other methods if ID3 does not exist) to fill in the song info. Editing options will come later.<br><br>
+            <b>I <i>THINK</i> I FOUND A BUG!</b><br>
+            Think so? Contact me through twitter (Often slow) or contact{at}zenny3d.com<br><br>
+            <b>CREDITS/LIBRARIES</b><br>
+            <a href="http://threejs.org/" class="ahref" target="_blank">ThreeJS</a><br>
+            <a href="http://jscolor.com/" class="ahref" target="_blank">JSColor</a><br>
+            <a target="_blank" href="https://github.com/43081j/id3" class="ahref">ID3</a><br>
+            Web Audio API<br>
+            <a target="_blank" href="http://game-icons.net/" class="ahref">Game-icons</a>
+            <br><br>My Twitter: <a target="_blank" href="https://twitter.com/ZennyDev" class="ahref" id="twtr">@ZennyDev</a>
+            <br><br>Click "Help" again to close this menu.
+        </div>
+        <div id="wrap">
+            <canvas class="noselect" id="stars" width="1" height="1"></canvas>
+            <span id="loader" style="opacity: 0.0;visibility:visible;">Loading...<br><span id='xload'>Strange things can happen if you tab out during this...</span></span>
+            <div id="mnstrstyle">
+                <canvas class="noselect" id="canvas" width="940" height="320"></canvas>
+                <a href="#">
+                    <object class="noselect" width="111" height="111" id="albumart" data="img/monstercat_logow.png" type="image/png" style="visibility: visible;transform: rotateY(0deg);border: 2px solid #28b9b1; background-color: #28b9b1;">
+                        <center><img class="noselect" width="111" height="111" src="img/monstercat_logow.png" onError="this.src='img/monstercat_logow.png';" style="margin-left:-2px;margin-top:-2px"/></center>
+                    </object>
+                </a>
+                <img id="dnsng" src="img/edt.png" class="noselect" style="visibility:hidden"/>
+                <div id="snginf" style="margin-top: 60px;">
+                    <span id="artist" style="visibility:visible">UNKNOWN</span><div id="edtart" style="visibility:hidden"><input type="text" id="artbox" class="tbox" placeholder="UNKNOWN"/></div><br>
+                    <span id="song" style="visibility:visible">NO SONG</span><div id="edtsng" style="visibility:hidden"><input type="text" id="sngbox" class="tbox edt" placeholder="NO SONG"/></div><br>
+                    <span id="feat" style="visibility: hidden;">(FEAT. JESUS NAILS)</span>
+                </div>
+            </div>
+            <div id="wrapinfo" style="visibility:visible;">
+                <table cellspacing="0" cellpadding="2" border="0">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <ul id="menus">
+                                    <li id="fileBtn-m" style="width: 48px;visibility: hidden;">
+                                        <center id="fbtnc">
+                                            <input type="text" id="urlbox" class="tbox" placeholder="http://www.site.com/song.mp3"/>
+                                            <label id="fileup-label" for="fileurl">Load</label>
+                                            <input type="button" id="fileurl" accept="audio/mp3" style="visibility: hidden"/>
+                                            <br>OR <br><label id="fileup-label" for="fileup">File...</label>
+                                            <input type="file" id="fileup" accept="audio/mp3" style="visibility: hidden"/>
+                                        </center>
+                                    </li><!--w:256-->
+                                    <li id="playpause-m" style="visibility: hidden;">
+                                        <center>
+                                            <input id="volr" type="range" orient="vertical" />
+                                        </center>
+                                    </li>
+                                    <li id="colPick-m" style="visibility: hidden;">
+                                        <center>
+                                            Click:<br>
+                                            <input id="clrpk"
+                                            class="color {onImmediateChange:'viss.updateCol(this);',pickerFaceColor:'transparent',pickerFace:3,pickerBorder:0,pickerInsetColor:'black'}"
+                                            value="28b9b1" style="width:50px;"/>
+                                        </center>
+                                    </li>
+                                    <li style="visibility:hidden"></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <ul id="mui">
+                                    <li id="fileBtn">
+                                        <div><img src="img/load.png" class="noselect" /></div>
+                                    </li>
+                                    <li id="playpause">
+                                        <div><img src="img/speaker.png" class="noselect" /></div>
+                                    </li>
+                                    <li id="colPick">
+                                        <div><img src="img/palette.png" class="noselect" /></div>
+                                    </li>
+                                    <li id="loadTxt"><img src="img/xd.png" class="x noselect" style="visibility:hidden;" />
+                                        <div><img src="img/loader.png" class="noselect" /></div>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+            </div>
+            <span id="chrme"></span>
+            <a href="#" id="tdlist" class="ahref">Todo</a> <a href="#" id="helpme" class="ahref">Help</a> <a href="#" id="hidethis" class="ahref">Hide</a>
+            <span id="noaffil">No&thinsp;affiliation&thinsp;with&thinsp;Monstercat</span>
+        </div>
+    </body>
+</html>
