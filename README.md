@@ -12,6 +12,7 @@ All important functionality happens in **js/mnstr_visualizer.js**
 - Losing focus in some browsers while the song is being analyzed and loaded may cause the analyser to get confused and make the song return false values.
 - Chrome has seemed to have lost performace on this app over time.
 - Sometimes no picture still causes the photo slot to spin and think there is one.
+- Checking for Featured Artists is incomplete.
 
 # Live Demo
 I have a live demo on my site, here: http://monstercat.zenny3d.com/
